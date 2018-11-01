@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools"> <h2>Nodi</h2>
+            <md-button ng-click="closeDialog()" aria-label="chiudi modal">
+                <img class="png-icon" src="static/source/icons/Close_Button_red.png" aria-label="x" style="width: 24px; height: 24px;">
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-content style="width:800px; height:810px; padding:30px;">
+        <md-list ng-controller="nodeController">
+            <md-subheader class="md-no-sticky">Lista dei nodi del grafo</md-subheader>
+            <md-list-item  class="md-no-sticky" ng-repeat="nodo in nodes" ng-click="showNodeInfo(nodo, $event)">
+                <p>{{ nodo.nome }}</p>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</md-dialog>
+
+</body>
+</html>

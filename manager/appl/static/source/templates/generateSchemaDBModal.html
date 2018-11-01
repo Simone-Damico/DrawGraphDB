@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools"> <h2>Genera idatabase di {{ nomeProgetto }}</h2>
+            <md-button ng-click="closeDialog()" aria-label="chiudi modal">
+                <img class="png-icon" src="static/source/icons/Close_Button_red.png" aria-label="x" style="width: 24px; height: 24px;">
+            </md-button>
+        </div>
+    </md-toolbar><br>
+
+    <md-dialog-content style="width:800px; height:810px; padding:30px;">
+        <form name="datiProgetto">
+            Nome del database<br/>
+            <md-input-container>
+                <input ng-model="nomeDB" aria-label="nome del DB">
+            </md-input-container><br/>
+            Scegli la tecnologia con cui generare la base di dati<br/>
+            <md-input-container>
+                <md-select ng-model="dbms" aria-label="DBMS supportati">
+                    <label>Seleziona DBMS</label>
+                    <md-option ng-repeat="dbms in supportedDB" value="{{ dbms }}">{{ dbms }}</md-option>
+                </md-select><br/>
+            </md-input-container><br/>
+
+
+            <md-button ng-click="create_schema()">Genera schema</md-button>
+        </form>
+    </md-dialog-content>
+</md-dialog>
+
+</body>
+</html>

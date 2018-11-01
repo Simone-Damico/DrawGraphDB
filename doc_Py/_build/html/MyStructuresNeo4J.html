@@ -1,0 +1,385 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MyStructuresNeo4J &#8212; prova 1.0 documentazione</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="index" title="Indice" href="genindex.html" />
+    <link rel="search" title="Cerca" href="search.html" />
+    <link rel="prev" title="MyStructuresSQL" href="MyStructuresSQL.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="mystructuresneo4j">
+<h1>MyStructuresNeo4J<a class="headerlink" href="#mystructuresneo4j" title="Link a questa intestazione">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link a questa intestazione">¶</a></h2>
+<p>MyStructuresSQL contiene le classi generiche per l’interazione con le API <a class="reference external" href="https://neomodel.readthedocs.io/en/latest/index.html">neomodel</a> per i database a grafi.</p>
+</div>
+<div class="section" id="classi-dei-field-type">
+<h2>Classi dei Field Type<a class="headerlink" href="#classi-dei-field-type" title="Link a questa intestazione">¶</a></h2>
+<p>Classi per la definizioni dei campi delle proprietà di nodi ed archi.</p>
+<dl class="class">
+<dt id="MyIDField">
+<em class="property">class </em><code class="descname">MyIDField</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyIDField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.UniqueIdProperty">UniqueIdProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo ID.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MyBooleanField">
+<em class="property">class </em><code class="descname">MyBooleanField</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyBooleanField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.BooleanProperty">BooleanProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo boolean.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MyStringField">
+<em class="property">class </em><code class="descname">MyStringField</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyStringField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.StringProperty">StringProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo string.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MyDateField">
+<em class="property">class </em><code class="descname">MyDateField</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyDateField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.DateProperty">DateProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo date.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MyFloatField">
+<em class="property">class </em><code class="descname">MyFloatField</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyFloatField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.FloatProperty">FloatProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo float.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="MyIntegerField">
+<em class="property">class </em><code class="descname">MyIntegerField</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyIntegerField" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.properties.IntegerProperty">IntegerProperty</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione del campo integer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="classi-dei-models-type">
+<h2>Classi dei Models Type<a class="headerlink" href="#classi-dei-models-type" title="Link a questa intestazione">¶</a></h2>
+<p>Classi per la definizioni dei nodi e degli archi.</p>
+<dl class="class">
+<dt id="MyNode">
+<em class="property">class </em><code class="descname">MyNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyNode" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.core.StructuredNode">StructuredNode</a></td>
+</tr>
+</tbody>
+</table>
+<p>Clase per la definizione dei nodi.</p>
+<dl class="classmethod">
+<dt id="MyNode.getNodes">
+<em class="property">classmethod </em><code class="descname">getNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MyNode.getNodes" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Ritorna:</th><td class="field-body">Insieme dei nodi di una classe istanza di MyNode.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Tipo di ritorno:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.match.NodeSet">NodeSet</a></td>
+</tr>
+</tbody>
+</table>
+<p>Metodo per ottenere tutti i nodi di una classe istanza di MyNode.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="MyNode.countNodes">
+<em class="property">classmethod </em><code class="descname">countNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MyNode.countNodes" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Ritorna:</th><td class="field-body">numero dei nodi di una classe istanza di MyNode.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Tipo di ritorno:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+<p>Metodo per contare tutti i nodi di una classe istanza di MyNode.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="MyNode.orderByParam">
+<em class="property">classmethod </em><code class="descname">orderByParam</code><span class="sig-paren">(</span><em>param</em><span class="sig-paren">)</span><a class="headerlink" href="#MyNode.orderByParam" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parametri:</th><td class="field-body"><strong>param</strong> (<em>str</em>) – criterio di ordinamento</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Ritorna:</th><td class="field-body">Lista dei nodi istanze di una classe istanza di MyNode ordinate secondo param.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Tipo di ritorno:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#neomodel.match.NodeSet">NodeSet</a></td>
+</tr>
+</tbody>
+</table>
+<p>Metodo per ordinare i nodi di una classe istanza di MyNode secondo il valore di un’attributo.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MyEdge">
+<em class="property">class </em><code class="descname">MyEdge</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#MyEdge" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Extend:</th><td class="field-body"><a class="reference external" href="https://neomodel.readthedocs.io/en/latest/module_documentation.html#module-neomodel.relationship">StructuredRel</a></td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione degli archi.</p>
+<dl class="classmethod">
+<dt id="MyEdge.countEdges">
+<em class="property">classmethod </em><code class="descname">countEdges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MyEdge.countEdges" title="Link a questa definizione">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Ritorna:</th><td class="field-body">numero dei nodi di una classe istanza di MyEdge</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Tipo di ritorno:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+<p>Metodo per contare tutti i nodi di una classe istanza di MyEdge.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="classi-delle-relationship-type">
+<h2>Classi delle Relationship Type<a class="headerlink" href="#classi-delle-relationship-type" title="Link a questa intestazione">¶</a></h2>
+<p>Classi per la definizione delle relationship.</p>
+<dl class="class">
+<dt>
+<code class="descname">MyManyToManyField(cls_name, label, direction, cardinalitySource, cardinalityTarget, model=None):</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parametri:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls_name</strong> (<em>str</em>) – classe del’altro nodo collegato dalla relationship</li>
+<li><strong>label</strong> – Label dell’arco</li>
+<li><strong>direction</strong> (<em>str</em>) – Direzione dell’arco, può essere OUTGOING o INCOMING</li>
+<li><strong>cardinalitySource</strong> (<em>str</em>) – Cardinalità massima e minima del nodo sorgente</li>
+<li><strong>cardinalityTarget</strong> (<em>str</em>) – Cardinalità massima e minima del nodo destinazione</li>
+<li><strong>model</strong> (<em>str</em>) – L’arco a cui si riferisce la relationship</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Extend:</th><td class="field-body"><p class="first last">RelationshipDefinition</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione delle relationship molti a molti.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<code class="descname">MyOneToOneField(cls_name, label, direction, cardinalitySource, cardinalityTarget, model=None):</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parametri:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls_name</strong> (<em>str</em>) – classe del’altro nodo collegato dalla relationship</li>
+<li><strong>label</strong> – Label dell’arco</li>
+<li><strong>direction</strong> (<em>str</em>) – Direzione dell’arco, può essere OUTGOING o INCOMING</li>
+<li><strong>cardinalitySource</strong> (<em>str</em>) – Cardinalità massima e minima del nodo sorgente</li>
+<li><strong>cardinalityTarget</strong> (<em>str</em>) – Cardinalità massima e minima del nodo destinazione</li>
+<li><strong>model</strong> (<em>str</em>) – L’arco a cui si riferisce la relationship</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Extend:</th><td class="field-body"><p class="first last">RelationshipDefinition</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione delle relationship uno a uno.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<code class="descname">MyManyToOneField(cls_name, label, direction, cardinalitySource, cardinalityTarget, model=None):</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parametri:</th><td class="field-body"><ul class="first simple">
+<li><strong>cls_name</strong> (<em>str</em>) – classe del’altro nodo collegato dalla relationship</li>
+<li><strong>label</strong> – Label dell’arco</li>
+<li><strong>direction</strong> (<em>str</em>) – Direzione dell’arco, può essere OUTGOING o INCOMING</li>
+<li><strong>cardinalitySource</strong> (<em>str</em>) – Cardinalità massima e minima del nodo sorgente</li>
+<li><strong>cardinalityTarget</strong> (<em>str</em>) – Cardinalità massima e minima del nodo destinazione</li>
+<li><strong>model</strong> (<em>str</em>) – L’arco a cui si riferisce la relationship</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Extend:</th><td class="field-body"><p class="first last">RelationshipDefinition</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Classe per la definizione delle relationship uno a molti.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">prova</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigazione</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="project.html">Project Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">CODICE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Manager.html">Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MyStructuresSQL.html">MyStructuresSQL</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MyStructuresNeo4J</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classi-dei-field-type">Classi dei Field Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classi-dei-models-type">Classi dei Models Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classi-delle-relationship-type">Classi delle Relationship Type</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="MyStructuresSQL.html" title="capitolo precedente">MyStructuresSQL</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Ricerca veloce</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Vai" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Simone.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="_sources/MyStructuresNeo4J.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

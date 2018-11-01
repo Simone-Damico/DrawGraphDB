@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: openProjectController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: openProjectController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>app
+/**
+ * Controller per l'apertura di un nuovo progetto
+ * @module openProject
+ * @param {Object} $scope L'oggetto {@link https://docs.angularjs.org/guide/scope|$scope} indica il contesto in cui sono
+ * salvati i dati e valutate le espressioni
+ * @param {Object} $http Il servizio AngularJS {@link https://docs.angularjs.org/api/ng/service/$http|$http} per la
+ * comunicazione con i server HTTP
+ * @param {Object} $mdDialog Il servizio di AngularJS Material
+ * {@link https://material.angularjs.org/1.1.6/api/service/$mdDialog|$mdDialog} permette di gestire una finestra di
+ * dialogo con l'utente
+ * @param {Object} Labels Il servizio {@link Labels} contiene i dati del grafo utente
+ */
+.controller("openProject", function($scope, $http, $mdDialog, Labels){
+
+    $scope.labels = Labels;
+    $scope.progetti = null;
+
+    /**
+     * Mostra la finestra modale per l'apertuta di un nuovo progetto
+     * @function showOpenProject
+     * @param {event} $event Click dell'utente sul bottone dell'interfaccia
+     */
+    $scope.showOpenProject= function($event) {
+        $mdDialog.show({
+            targetEvent: $event,
+            templateUrl: 'static/source/templates/openProjectModal.html',
+            windowClass: 'modal-content',
+            controller: openProjectCtrl,
+            clickOutsideToClose: true
+        });
+    };
+
+    function openProjectCtrl($scope, $mdDialog, Labels) {
+
+        $scope.nomeProgetto = Labels.nomeProgetto;
+        $scope.nomeDB = Labels.nomeDB;
+        $scope.descrizioneProgetto = Labels.descrizioneProgetto;
+        $scope.supportedDB = Labels.supportedDB;
+        $scope.dbms = Labels.dbms;
+
+        // GET dei vari progetti e le loro informazioni
+        $http.get("../showProjects/")
+            .then(function successCallback(response) {
+                $scope.progetti = response.data;
+                console.log("res, ", response.data);
+                console.log("Successfully GET-ed data");
+                },function errorCallback(response){
+                console.log("GET-ing of data failed");
+            });
+
+        /**
+         * Apre il progetto selezionato dall'utente ricevendolo dalla view openProject
+         * @function openPro
+         * @param {Object} pro Il progetto da aprire
+         */
+        $scope.openPro = function (pro) {
+
+            $http.post("../openProject/", JSON.stringify(pro))
+                .then(function successCallback(response){
+
+                    // Inizializzo le variabili di Labels con i dati del progetto appena creato
+                    Labels.nomeProgetto = response.data.name_project;
+                    Labels.nomeDB = response.data.name_db;
+                    Labels.dbms = response.data.dbms;
+                    Labels.porta = response.data.port;
+                    Labels.projectFolder = response.data.folder;
+                    Labels.createdDate = response.data.created_date;
+                    if (response.data.graph != null){
+                        dati = JSON.parse(response.data.graph);
+                        Labels.nodes = dati.nodes;
+                        Labels.links = dati.links;
+                        Labels.domini = dati.domini;
+                        Labels.lastNodeId = dati.lastNodeId;
+                        Labels.lastLinkId = dati.lastLinkId;
+                        Labels.tipiBase = dati.tipiBase;
+                        Labels.operatoriConfronto = dati.operatoriConfronto;
+                        Labels.molteplicita = dati.molteplicita;
+                        Labels.supportedDB = dati.supportedDB;
+                        Labels.nSel=dati.nSel;
+                        Labels.lSel=dati.lSel;
+                    }
+                    $scope.closeDialog();
+                    //graphController.restart();
+                    console.log("Successfully POST-ed data");
+                    }, function errorCallback(response){
+                    console.log("POST-ing of data failed");
+            });
+        };
+
+        /**
+         * Nasconde la finestra modale
+         * @function closeDialog
+         */
+        $scope.closeDialog = function () {
+            $mdDialog.hide();
+        };
+    }
+
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-deleteProject.html">deleteProject</a></li><li><a href="module-infoProject.html">infoProject</a></li><li><a href="module-linkController.html">linkController</a></li><li><a href="module-newProject.html">newProject</a></li><li><a href="module-nodeController.html">nodeController</a></li><li><a href="module-openProject.html">openProject</a></li><li><a href="module-saveProject.html">saveProject</a></li><li><a href="module-typeController.html">typeController</a></li></ul><h3>Namespaces</h3><ul><li><a href="Labels.html">Labels</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createdDate">createdDate</a></li><li><a href="global.html#dbms">dbms</a></li><li><a href="global.html#descrizioneProgetto">descrizioneProgetto</a></li><li><a href="global.html#domini">domini</a></li><li><a href="global.html#links">links</a></li><li><a href="global.html#molteplicita">molteplicita</a></li><li><a href="global.html#nodes">nodes</a></li><li><a href="global.html#nomeDB">nomeDB</a></li><li><a href="global.html#nomeProgetto">nomeProgetto</a></li><li><a href="global.html#porta">porta</a></li><li><a href="global.html#projectFolder">projectFolder</a></li><li><a href="global.html#supportedDB">supportedDB</a></li><li><a href="global.html#tipiBase">tipiBase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jul 31 2018 16:09:48 GMT+0200 (ora legale Europa occidentale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

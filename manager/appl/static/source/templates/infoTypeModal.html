@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<md-dialog aria-label="info dominio">
+    <md-toolbar>
+        <div class="md-toolbar-tools"> <h2>Specifiche del dominio {{ dom.nome }}</h2>
+            <md-button ng-click="closeDialog()">
+                <img class="png-icon" src="static/source/icons/Close_Button_red.png" aria-label="x" style="width: 24px; height: 24px;">
+            </md-button>
+        </div>
+    </md-toolbar><br>
+
+    <md-dialog-content style="width:800px; height:810px; padding:30px;">
+        <form name="modificaDominio">
+            <md-input-container aria-label="nome dominio">
+                <input type="text" ng-model="dom.nome" required name="nome" aria-label="generico del dominio"/>
+            </md-input-container>
+            <div>
+                generico: {{ dom.generico }}
+            </div>
+
+            <!-- MODIFICA VALORE DI DEFAULT -->
+
+            <div ng-switch ="dom.generico">
+                <md-input-container ng-switch-when= 'int' >
+                    <label>Scrivi il valore di default</label>
+                    <input name="valInt" ng-model="$parent.dom.default" ng-pattern="/^(\-|\+)?[0-9]+$/" />
+                    <div ng-messages="modificaDominio.valInt.$error">
+                        <div ng-message="pattern">Inseire un intero</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-switch-when= 'float' >
+                    <label>Scrivi il valore di default</label>
+                    <input name="valFlo" ng-model="$parent.dom.default" ng-pattern="/^(\-|\+)?[0-9]+(\.[0-9]+)?$/"/>
+                    <div ng-messages="modificaDominio.valFlo.$error">
+                        <div ng-message="pattern">Inseire un numero</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'string' >
+                    <label>Scrivi il valore di default</label>
+                    <input ng-model="$parent.dom.default"/>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'date' >
+                    <md-datepicker name="data" ng-model="$parent.dom.default" md-placeholder="Scegli data di default"></md-datepicker>
+                    <div ng-messages="modificaDominio.data.$error">
+                        <div ng-message="valid">Inserire una data valida</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'bool' >
+                    <md-radio-group ng-model="$parent.dom.default">
+                        Scegli il valore di default
+                        <br/><br/>
+                        <md-radio-button value="true" class="md-primary">True</md-radio-button>
+                        <md-radio-button value="false" class="md-primary">False</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+
+                <md-input-container ng-switch-when='enum'>
+                    <label>Scegli il valore di default</label>
+                    <md-select ng-model="$parent.dom.default" required>
+                        <md-option ng-repeat="elemento in dom.valori" value="{{elemento}}">{{elemento}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+
+            <!-- MODIFICA INTERVALLI -->
+
+            <md-list>
+                Intervalli
+                <div ng-repeat="intervallo in dom.valori">
+                    <md-list-item>
+                        {{ intervallo }}
+                        <md-button class="md-secondary" ng-click="removeIntervallo($index)" style="color : black;
+                                background-color: red;
+                                min-width: 5%;
+                                font-size: 16px;">X</md-button>
+                    </md-list-item>
+                </div>
+            </md-list>
+        </form>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <div layout="row" layout-align="center">
+            <md-button ng-click="closeDialog()" class="md-raised"> Chiudi </md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>
+</body>
+</html>

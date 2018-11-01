@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools"> <h2>Definisci un dominio specifico</h2>
+            <md-button ng-click="closeDialog()">
+                <img class="png-icon" src="static/source/icons/Close_Button_red.png" aria-label="x" style="width: 24px; height: 24px;">
+            </md-button>
+        </div>
+    </md-toolbar><br>
+
+    <md-dialog-content style="width:800px;height:810px; padding : 30px;">
+        <form name="inserisciDominio">
+            <h3>In questo modal puoi definire un nuovo tipo da associare ad una proprietà</h3>
+
+            <style>
+                table { width: 100%;}
+            </style>
+            <table cellspacing="10">
+                <tr><td>
+                    <md-input-container>
+                        <label>Scrivi il nome</label>
+                        <input type="text" ng-model="newTypeName" required name="nome"/>
+                        <div ng-messages="inserisciDominio.nome.$error">
+                            <div ng-message="required">Nome obbligatorio.</div>
+                        </div>
+                    </md-input-container></td>
+                    <td rowspan="2"><md-button type="submit" ng-click="nuovoTipo()" ng-disabled="inserisciDominio.$invalid" class="md-raised"> Aggiungi tipo </md-button></td>
+                </tr>
+                <tr><td>
+                    <md-input-container>
+                        <label>Scegli tipo</label>
+                        <md-select ng-model="newTypeGen" required name="tipo" ng-change="reset()" >
+                            <md-option ng-repeat="tipo in tipiBase" value="{{tipo}}">{{tipo}}</md-option>
+                        </md-select>
+                    </md-input-container></td>
+                </tr>
+            </table>
+
+            <!-- INIZIO SEZIONE PER I VALORI DI DEFAULT -->
+
+            <div ng-switch ="newTypeGen">
+                <md-input-container ng-switch-when= 'int' >
+                    <label>Scrivi il valore di default</label>
+                    <input name="valInt" ng-model="$parent.newTypeDefault" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                    <div ng-messages="inserisciDominio.valInt.$error">
+                        <div ng-message="pattern">Inseire un intero</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-switch-when= 'float' >
+                    <label>Scrivi il valore di default</label>
+                    <input name="valFlo" ng-model="$parent.newTypeDefault" ng-pattern="/^(\-|\+)?[0-9]+(\.[0-9]+)?$/"/>
+                    <div ng-messages="inserisciDominio.valFlo.$error">
+                        <div ng-message="pattern">Inseire un numero</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'string' >
+                    <label>Scrivi il valore di default</label>
+                    <input ng-model="$parent.newTypeDefault"/>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'date' >
+                    <md-datepicker name="data" ng-model="$parent.newTypeDefault" md-placeholder="Scegli data di default"></md-datepicker>
+                    <div ng-messages="inserisciDominio.data.$error">
+                        <div ng-message="valid">Inserire una data valida</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-switch-when= 'bool' >
+                    <md-radio-group ng-model="$parent.newTypeDefault">
+                        Scegli il valore di default
+                        <br/><br/>
+                        <md-radio-button value="true" class="md-primary">True</md-radio-button>
+                        <md-radio-button value="false" class="md-primary">False</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+            </div>
+            <!-- FINE SEZIONE PER I TIPO DI DEFAULT -->
+
+            <!-- INIZIO SEZIONE PER GLI INTERVALLI DI VALORE -->
+            <div ng-switch on ="newTypeGen" >
+                <md-input-container ng-show="newTypeGen == 'int' || newTypeGen == 'float' || newTypeGen == 'date' " >
+                    <br/>
+                    Decidi gli intervali dei valori accettabili
+                    <br/>
+                    <md-radio-group ng-model="sceltaVinc" name="cc">
+                        <md-radio-button value="intervallo">Intervallo</md-radio-button>
+                        <md-radio-button value="maggiore">Maggiore di </md-radio-button>
+                        <md-radio-button value="minore">Minore di</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+                <div ng-switch-when= 'int' >
+                    <div ng-show="sceltaVinc == 'intervallo'">
+                        <md-input-container>
+                            <label>Da</label>
+                            <input name="valInt1" ng-model="$parent.interDa" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                            <div ng-messages="inserisciDominio.valInt1.$error">
+                                <div ng-message="pattern">Inseire un intero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+
+                        <md-input-container>
+                            <label>A</label>
+                            <input name="valInt2" ng-model="$parent.interA" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                            <div ng-messages="inserisciDominio.valInt2.$error">
+                                <div ng-message="pattern">Inseire un intero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'maggiore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <input name="valInt3" ng-model="$parent.magDi" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                            <div ng-messages="inserisciDominio.valInt3.$error">
+                                <div ng-message="pattern">Inseire un intero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'minore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <input name="valInt4" ng-model="$parent.minDi" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                            <div ng-messages="inserisciDominio.valInt4.$error">
+                                <div ng-message="pattern">Inseire un intero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                    </div>
+                </div>
+
+                <div ng-switch-when= 'float' >
+                    <div ng-show="sceltaVinc == 'intervallo'">
+                        <md-input-container>
+                            <label>Da</label>
+                            <input name="valFlo1" ng-model="$parent.interDa" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                            <div ng-messages="inserisciDominio.valFlo1.$error">
+                                <div ng-message="pattern">Inseire un numero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+                        <md-input-container>
+                            <label>A</label>
+                            <input name="valFlo2" ng-model="$parent.interA" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                            <div ng-messages="inserisciDominio.valFlo2.$error">
+                                <div ng-message="pattern">Inseire un numero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'maggiore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <input name="valFlo3" ng-model="$parent.magDi" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                            <div ng-messages="inserisciDominio.valFlo3.$error">
+                                <div ng-message="pattern">Inseire un numero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'minore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <input name="valFlo4" ng-model="$parent.minDi" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                            <div ng-messages="inserisciDominio.valFlo4.$error">
+                                <div ng-message="pattern">Inseire un numero</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                    </div>
+                </div>
+
+                <div ng-switch-when= 'date' >
+                    <div ng-show="sceltaVinc == 'intervallo'">
+                        <md-input-container>
+                            <label>Da</label>
+                            <md-datepicker name="data1" ng-model="$parent.interDa"></md-datepicker>
+                            <div ng-messages="inserisciDominio.data1.$error">
+                                <div ng-message="valid">Inserire una data valida</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+                        <md-input-container>
+                            <label>A</label>
+                            <md-datepicker name="data2" ng-model="$parent.interA"></md-datepicker>
+                            <div ng-messages="inserisciDominio.data2.$error">
+                                <div ng-message="valid">Inserire una data valida</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'maggiore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <md-datepicker name="data3" ng-model="$parent.magDi"></md-datepicker>
+                            <div ng-messages="inserisciDominio.data3.$error">
+                                <div ng-message="valid">Inserire una data valida</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                    </div>
+
+                    <div ng-show="sceltaVinc == 'minore'">
+                        <md-input-container>
+                            <label>Di</label>
+                            <md-datepicker name="data4" ng-model="$parent.minDi"></md-datepicker>
+                            <div ng-messages="inserisciDominio.data4.$error">
+                                <div ng-message="valid">Inserire una data valida</div>
+                            </div>
+                        </md-input-container>
+                        <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                    </div>
+                </div>
+
+                <div ng-switch-when='enum'>
+                    <md-radio-group ng-model="$parent.sel">
+                        <style>
+                            table#tableEnum{
+                                width: 50%;
+                            }
+                            table#tableEnum td,th{
+                                text-align: left;
+                            }
+                            .btn1 {
+                                color : black;
+                                background-color: red;
+                                min-width: 5%;
+                                font-size: 16px;
+                            }
+                        </style>
+                        <table id="tableEnum">
+                            <thead>
+                                <tr><th>Elementi</th><th>Default</th><th>Elimina</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr><td>nessun default</td>
+                                <td><md-radio-button ng-value="$index" class="md-primary"></md-radio-button></td>
+                                <td></td>
+                            </tr>
+                            <tr ng-repeat="elem in enum">
+                                <td>{{ elem }}</td>
+                                <td><md-radio-button ng-value="$index" class="md-primary"></md-radio-button></td>
+                                <td><md-button class = "btn1" ng-click="removeElem($index)" align="right"> X </md-button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-radio-group>
+
+                    <md-input-container>
+                        <label>numero di elementi</label>
+                        <input name="valInt5" ng-model="$parent.nomeApp"/>
+                    </md-input-container>
+                    <md-button ng-click="addElem()" class="md-raised">Aggiungi elemento</md-button>
+                </div>
+
+                <div ng-switch-when="int|float|date" ng-switch-when-separator="|">
+                    <div>
+                        <md-button ng-click="insIntervalli()" class="md-raised" ng-disabled="(inserisciDominio.interDa.$invalid && inserisciDominio.interA.$invalid)
+                                                                                               || inserisciDominio.magDi.$invalid
+                                                                                                || inserisciDominio.minDi.$invalid"> Aggiungi vincolo </md-button>
+                    </div>
+                    <br/><br/><br/>
+                    <hr/>
+                    <style>
+                        table#tableIntervalli{
+                            width: 50%;
+                        }
+                        table#tableIntervalli td,th{
+                            text-align: left;
+                        }
+                        .btn1 {
+                            color : black;
+                            background-color: red;
+                            min-width: 5%;
+                            font-size: 16px;
+                        }
+                    </style>
+                    <table id="tableIntervalli" ng-show="intervalli.length !== 0">
+                        <thead>
+                        <tr><th>Intervalli definiti</th><th>Elimina</th></tr>
+                        </thead>
+                        <tr ng-repeat="intervallo in intervalli track by $index">
+                            <td>{{ intervallo }}</td>
+                            <td><md-button class = "btn1" ng-click="removeIntervallo($index)" align="right"> X </md-button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- FINE SEZIONE PER GLI INTERVALLI DI VALORE -->
+
+        </form>
+    </md-dialog-content>
+
+    <md-dialog-actions>
+        <div layout="row" layout-align="center">
+            <md-button ng-click="closeDialog()" class="md-raised"> Chiudi </md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>
+</body>
+</html>

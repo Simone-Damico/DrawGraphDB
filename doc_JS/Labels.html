@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: Labels</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: Labels</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Labels</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Servizio per la gestione dei dati inseriti dall'utente nel grafo</div>
+        
+
+        
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>nomeProgetto</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il nome del progetto</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nomeDB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il nome del database</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>descrizioneProgetto</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">La descrizione del progetto</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dbms</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il tipo di DBMS</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>porta</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il numero di porta http del progetto</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>projectFolder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Path</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Il path del progetto</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">La data di creazione</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nodes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">I nodi del grafo</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>links</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Gli archi del grafo</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tipiBase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">I tipi base per la definizione dei domini</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>domini</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">I domini dei dati</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>molteplicità</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Le molteplicità degli archi</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>supportedDB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">I DBMS supportati</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="graphService.js.html">graphService.js</a>, <a href="graphService.js.html#line3">line 3</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-deleteProject.html">deleteProject</a></li><li><a href="module-infoProject.html">infoProject</a></li><li><a href="module-linkController.html">linkController</a></li><li><a href="module-newProject.html">newProject</a></li><li><a href="module-nodeController.html">nodeController</a></li><li><a href="module-openProject.html">openProject</a></li><li><a href="module-saveProject.html">saveProject</a></li><li><a href="module-typeController.html">typeController</a></li></ul><h3>Namespaces</h3><ul><li><a href="Labels.html">Labels</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createdDate">createdDate</a></li><li><a href="global.html#dbms">dbms</a></li><li><a href="global.html#descrizioneProgetto">descrizioneProgetto</a></li><li><a href="global.html#domini">domini</a></li><li><a href="global.html#links">links</a></li><li><a href="global.html#molteplicita">molteplicita</a></li><li><a href="global.html#nodes">nodes</a></li><li><a href="global.html#nomeDB">nomeDB</a></li><li><a href="global.html#nomeProgetto">nomeProgetto</a></li><li><a href="global.html#porta">porta</a></li><li><a href="global.html#projectFolder">projectFolder</a></li><li><a href="global.html#supportedDB">supportedDB</a></li><li><a href="global.html#tipiBase">tipiBase</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jul 31 2018 16:09:48 GMT+0200 (ora legale Europa occidentale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

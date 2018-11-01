@@ -1,0 +1,364 @@
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools"> <h2>Specifiche del nodo {{ nodo.nome }}</h2>
+            <md-button ng-click="closeDialog()" aria-label="chiudi modal">
+                <img class="png-icon" src="static/source/icons/Close_Button_red.png" aria-label="x" style="width: 24px; height: 24px;">
+            </md-button>
+        </div>
+    </md-toolbar><br>
+
+    <md-dialog-content style="width:800px;height:810px; padding : 30px;">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="Proprietà">
+                <form name="proprietaNodo">
+                    <br/>
+                    <md-input-container>
+                        <label>Nome del nodo</label>
+                        <input type="text" ng-model="nodo.nome" value="{{ nodo.nome }}"/>
+                    </md-input-container>
+                    <hr/>
+                    <h3> Aggiungi Proprietà </h3>
+                    <md-input-container>
+                        <label>Nome</label>
+                        <input type="text" ng-model="newNodeProp.nome" name="nome" ng-keydown="pressed($event)"/>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Dominio</label>
+                        <md-select ng-model="newNodeProp.dominio" name="dominio" aria-label="seleziona dominio">
+                            <md-option ng-repeat="dom in domini" value="{{dom.nome}}" >{{dom.nome}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-checkbox ng-model="newNodeProp.notNull" aria-label="prop not null">
+                            not null
+                        </md-checkbox>
+                    </md-input-container>
+                    <md-button ng-click="addNodeProp()" class="md-raised" aria-label="aggiungi proprietà"
+                               ng-disabled=" proprietaNodo.nome.$invalid || proprietaNodo.dominio.$untouched "> Aggiungi </md-button>
+                    <hr/>
+                    <h3> Proprietà del nodo </h3>
+                    <div ng-repeat= "prop in nodo.proprieta">
+                        <md-input-container>
+                            <input type="text" ng-model="prop.nomeProp" value="{{ prop.nomeProp }}" id="nome" aria-label="proprietà"/>
+                        </md-input-container>
+                        <md-input-container>
+                            <md-select ng-model="prop.dominio" aria-label="dominio della prprietà" ng-change="resetDom($index)">
+                                <md-option ng-repeat="dom in domini" value="{{dom.nome}}">{{dom.nome}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <md-checkbox ng-model="prop.notNull" aria-label="prop not null">
+                                not null
+                            </md-checkbox>
+                        </md-input-container>
+                        <md-button ng-click="removeNodeProp($index)" class="md-raised" aria-label="rimuovi proprietà"> Rimuovi </md-button>
+                    </div>
+                </form>
+            </md-tab>
+
+            <md-tab label="Vincoli di dominio">
+                <form name="vincoliProp">
+                    <h3>In questo modal puoi definire delle restrizioni sui valori di una proprietà</h3>
+
+                    <md-input-container>
+                        <label>Scegli proprietà</label>
+                        <md-select ng-model="indexProp" ng-change = "genericoProp()" aria-label="scegli la proprietà">
+                            <md-option ng-repeat="prop in nodo.proprieta" value="{{$index}}">{{prop.nomeProp}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <br/>
+
+                    <!-- INIZIO SEZIONE PER I VALORI DI DEFAULT -->
+                    <div ng-show="indexProp !== undefined">
+                        <div ng-switch ="generico">
+                            <md-input-container ng-switch-when= 'int' >
+                                <label>Scrivi il valore di default</label>
+                                <input name="valInt" ng-model="$parent.nodo.proprieta[indexProp].default" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                                <div ng-messages="vincoliProp.valInt.$error">
+                                    <div ng-message="pattern">Inseire un intero</div>
+                                </div>
+                            </md-input-container>
+
+                            <md-input-container ng-switch-when= 'float' >
+                                <label>Scrivi il valore di default</label>
+                                <input name="valFlo" ng-model="$parent.nodo.proprieta[indexProp].default" ng-pattern="/^(\-|\+)?[0-9]+(\.[0-9]+)?$/"/>
+                                <div ng-messages="vincoliProp.valFlo.$error">
+                                    <div ng-message="pattern">Inseire un numero</div>
+                                </div>
+                            </md-input-container>
+
+                            <md-input-container ng-switch-when= 'string' >
+                                <label>Scrivi il valore di default</label>
+                                <input ng-model="$parent.nodo.proprieta[indexProp].default"/>
+                            </md-input-container>
+
+                            <md-input-container ng-switch-when= 'date' >
+                                <md-datepicker name="data" ng-model="$parent.nodo.proprieta[indexProp].default" md-placeholder="Scegli data di default"></md-datepicker>
+                                <div ng-messages="vincoliProp.data.$error">
+                                    <div ng-message="valid">Inserire una data valida</div>
+                                </div>
+                            </md-input-container>
+
+                            <md-input-container ng-switch-when= 'bool' >
+                                <md-radio-group ng-model="$parent.nodo.proprieta[indexProp].default">
+                                    Scegli il valore di default
+                                    <br/><br/>
+                                    <md-radio-button value="true" class="md-primary">True</md-radio-button>
+                                    <md-radio-button value="false" class="md-primary">False</md-radio-button>
+                                </md-radio-group>
+                            </md-input-container>
+
+                            <md-input-container ng-switch-when= 'enum' >
+                                Scegli valore default<br/>
+                                <md-radio-group ng-model="$parent.nodo.proprieta[indexProp].default">
+                                    <md-radio-button ng-value="null" class="md-primary"> Nessun default</md-radio-button>
+                                    <div ng-repeat="dom in domini" ng-if="dom.nome === nodo.proprieta[indexProp].dominio">
+                                        <div ng-repeat="elem in dom.valori">
+                                            <md-radio-button ng-value="elem" class="md-primary">{{ elem }}</md-radio-button>
+                                        </div>
+                                    </div>
+                                </md-radio-group>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <!-- FINE SEZIONE PER I TIPO DI DEFAULT -->
+
+                    <!-- INIZIO SEZIONE PER GLI INTERVALLI DI VALORE -->
+                    <div ng-show="indexProp !== undefined">
+                        <div ng-switch = "generico" >
+                            <md-input-container ng-show= "generico === 'int' ||
+                                                        generico === 'float' ||
+                                                        generico === 'date' " >
+                                <br/>
+                                Decidi gli intervali dei valori accettabili
+                                <br/><br/>
+                                <md-radio-group ng-model="sceltaVinc">
+                                    <md-radio-button value="intervallo">Intervallo</md-radio-button>
+                                    <md-radio-button value="maggiore">Maggiore di </md-radio-button>
+                                    <md-radio-button value="minore">Minore di</md-radio-button>
+                                </md-radio-group>
+                            </md-input-container>
+
+                            <div ng-switch-when= 'int' >
+                                <div ng-show="sceltaVinc == 'intervallo'">
+                                    <md-input-container>
+                                        <label>Da</label>
+                                        <input name="valInt1" ng-model="$parent.interDa" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                                        <div ng-messages="vincoliProp.valInt1.$error">
+                                            <div ng-message="pattern">Inseire un intero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+
+                                    <md-input-container>
+                                        <label>A</label>
+                                        <input name="valInt2" ng-model="$parent.interA" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                                        <div ng-messages="vincoliProp.valInt2.$error">
+                                            <div ng-message="pattern">Inseire un intero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'maggiore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <input name="valInt3" ng-model="$parent.magDi" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                                        <div ng-messages="vincoliProp.valInt3.$error">
+                                            <div ng-message="pattern">Inseire un intero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'minore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <input name="valInt4" ng-model="$parent.minDi" ng-pattern="/^(\-|\+)?[0-9]+$/"/>
+                                        <div ng-messages="vincoliProp.valInt4.$error">
+                                            <div ng-message="pattern">Inseire un intero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                                </div>
+                            </div>
+
+                            <div ng-switch-when= 'float' >
+                                <div ng-show="sceltaVinc == 'intervallo'">
+                                    <md-input-container>
+                                        <label>Da</label>
+                                        <input name="valFlo1" ng-model="$parent.interDa" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                                        <div ng-messages="vincoliProp.valFlo1.$error">
+                                            <div ng-message="pattern">Inseire un numero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+                                    <md-input-container>
+                                        <label>A</label>
+                                        <input name="valFlo2" ng-model="$parent.interA" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                                        <div ng-messages="vincoliProp.valFlo2.$error">
+                                            <div ng-message="pattern">Inseire un numero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'maggiore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <input name="valFlo3" ng-model="$parent.magDi" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                                        <div ng-messages="vincoliProp.valFlo3.$error">
+                                            <div ng-message="pattern">Inseire un numero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'minore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <input name="valFlo4" ng-model="$parent.minDi" ng-pattern="/^(\-|\+)?([0-9]+\.[0-9]+)?$/"/>
+                                        <div ng-messages="vincoliProp.valFlo4.$error">
+                                            <div ng-message="pattern">Inseire un numero</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                                </div>
+                            </div>
+
+                            <div ng-switch-when= 'date' >
+                                <div ng-show="sceltaVinc == 'intervallo'">
+                                    <md-input-container>
+                                        <label>Da</label>
+                                        <md-datepicker name="data1" ng-model="$parent.interDa"></md-datepicker>
+                                        <div ng-messages="vincoliProp.data1.$error">
+                                            <div ng-message="valid">Inserire una data valida</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoDaIncl">Estremo incluso</md-checkbox>
+                                    <md-input-container>
+                                        <label>A</label>
+                                        <md-datepicker name="data2" ng-model="$parent.interA"></md-datepicker>
+                                        <div ng-messages="vincoliProp.data2.$error">
+                                            <div ng-message="valid">Inserire una data valida</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoAIncl">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'maggiore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <md-datepicker name="data3" ng-model="$parent.magDi"></md-datepicker>
+                                        <div ng-messages="vincoliProp.data3.$error">
+                                            <div ng-message="valid">Inserire una data valida</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMag">Estremo incluso</md-checkbox>
+                                </div>
+
+                                <div ng-show="sceltaVinc == 'minore'">
+                                    <md-input-container>
+                                        <label>Di</label>
+                                        <md-datepicker name="data4" ng-model="$parent.minDi"></md-datepicker>
+                                        <div ng-messages="vincoliProp.data4.$error">
+                                            <div ng-message="valid">Inserire una data valida</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-checkbox ng-model="$parent.estremoMin">Estremo incluso</md-checkbox>
+                                </div>
+                            </div>
+
+                            <div ng-switch-when="int|float|date" ng-switch-when-separator="|">
+                                <div>
+                                    <md-button ng-click="insIntervallo()" class="md-raised" aria-label="inserisci vincolo"> Aggiungi vincolo </md-button>
+                                </div>
+                                <br/><br/><br/>
+                                <hr/>
+                                <style>
+                                    table#tableIntervalli{
+                                        width: 50%;
+                                    }
+                                    table#tableIntervalli td,th{
+                                        text-align: left;
+                                    }
+                                    .btn1 {
+                                        color : black;
+                                        background-color: red;
+                                        min-width: 5%;
+                                        font-size: 16px;
+                                    }
+                                </style>
+                                <table id="tableIntervalli" ng-show="nodo.proprieta[indexProp].intervalli.length !== 0">
+                                    <thead>
+                                    <tr><th>Intervalli definiti</th><th>Elimina</th></tr>
+                                    </thead>
+                                    <tr ng-repeat="intervallo in nodo.proprieta[indexProp].intervalli track by $index">
+                                        <td>{{ intervallo }}</td>
+                                        <td><md-button class = "btn1" ng-click="removeIntervallo($index)" align="right" aria-label="rimuovi intervallo"> X </md-button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FINE SEZIONE PER GLI INTERVALLI DI VALORE -->
+                </form>
+            </md-tab>
+
+            <md-tab label="Chiavi">
+                <form name="insChiavi">
+                    Definisci la chiave primaria, se non specificata il sistema ne creerà una
+                    <md-input-container>
+                        <label>Scegli chiave primaria</label>
+                        <md-select ng-model="pk" ng-change="addPK()" >
+                            <md-option ng-repeat="prop in nodo.proprieta"  value="{{prop.nomeProp}}"
+                                       ng-disabled="disabilita">{{prop.nomeProp}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <br/>
+
+                    la chiave primaria è formata da: {{ pk }}
+
+                    <br/><br/><hr/><br/>
+
+                    Definisci altre chiavi.<br/>
+                    Non si può usare una proprietà che fa già parte della chiave primaria per creare altre chiavi.<br/>
+                    <md-input-container>
+                        <label>scegli altra chiave</label>
+                        <md-select ng-model="altraChiave" name="altraChiave" multiple="">
+                            <md-option ng-repeat="prop in nodo.proprieta"  value="{{prop.nomeProp}}"
+                                       ng-disabled="(nodo.primaryKey == prop.nomeProp)">{{prop.nomeProp}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-button ng-click="addSK()" class="md-raised" ng-disabled="altraChiave === undefined" aria-label="aggiungi chiave secondaria"> Aggiungi </md-button>
+
+                    <style>
+                        table#tableChiaviSec{
+                            width: 50%;
+                        }
+                        table#tableEnum td,th{
+                            text-align: left;
+                        }
+                        .btn1 {
+                            color : black;
+                            background-color: red;
+                            min-width: 5%;
+                            font-size: 16px;
+                        }
+                    </style>
+                    <table id="tableChiaviSec">
+                        <thead>
+                        <tr><th>Chiave</th><th>Elimina</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="secKey in nodo.secondarykey">
+                            <td>{{ secKey }}</td>
+                            <td><md-button class = "btn1" ng-click="removeSK($index)" align="right" aria-label="rimuovi chiave secondaria"> X </md-button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </md-tab>
+        </md-tabs>
+    </md-dialog-content>
+</md-dialog>
