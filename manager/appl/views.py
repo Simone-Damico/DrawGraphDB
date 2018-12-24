@@ -2,18 +2,18 @@
 import os
 import json
 import subprocess
+from . import MyUtils
 
 import time
+
 from django.http import HttpResponse
-
-import MyUtils
-
 from django.shortcuts import render
 from django.core.management import call_command
 from django.db import connection
 from django.utils import timezone
 from .models import Project
 from django.core import serializers
+
 
 # Create your views here.
 
@@ -39,7 +39,7 @@ def new_project(request):
     # Prendo i dati dalla request
     project_name = json.loads(request.body)['name']
     project_description = json.loads(request.body)['description']
-    print "Start create project", project_name
+    print("Start create project", project_name)
 
     # Creo la struttura delle cartelle e dei file per il nuovo progetto
     project_folder = os.path.join(main_folder, project_name)
@@ -132,7 +132,7 @@ def show_projects(request):
 def delete_project(request):
     global current_project
     name_project = json.loads(request.body)
-    print name_project
+    print(name_project)
     Project.objects.get(name_project=name_project).delete()
     import shutil
     shutil.rmtree(current_project.folder)
@@ -194,8 +194,8 @@ def change_project_data(request):
         os.rename(os.path.join(project_folder, current_project.name_project, "new.py"),
                   os.path.join(project_folder, current_project.name_project, "settings.py"))
 
-        print os.path.join(project_folder, current_project.name_db + '.sqlite3')
-        print os.path.join(project_folder, new_nameDB + '.sqlite3')
+        print(os.path.join(project_folder, current_project.name_db + '.sqlite3'))
+        print(os.path.join(project_folder, new_nameDB + '.sqlite3'))
         os.rename(os.path.join(project_folder, current_project.name_db + '.sqlite3'),
                   os.path.join(project_folder, new_nameDB + '.sqlite3'))
 
@@ -239,7 +239,7 @@ def create_schema_SQL(request):
     current_project.graph = graph
     current_project.save()
     project_folder = current_project.folder
-    print "Creazione schema SQL"
+    print("Creazione schema SQL")
 
     # Modifico il file setting del progetto appena creato a seconda del dbms scelto dall'utente
     with open(os.path.join(project_folder, current_project.name_project, "settings.py")) as old, \
@@ -530,9 +530,9 @@ def create_schema_SQL(request):
     subprocess.Popen(
         ['python', 'manage.py', 'makemigrations', '--settings=' + current_project.name_project + '.settings'],
         cwd=current_project.folder)
-    print "Creazione models"
+    print("Creazione models")
     time.sleep(5)
-    print "Migrazione models"
+    print("Migrazione models")
     subprocess.Popen(['python', 'manage.py', 'migrate', '--settings=' + current_project.name_project + '.settings'],
                      cwd=current_project.folder)
 
@@ -541,7 +541,7 @@ def create_schema_SQL(request):
 
 def create_schema_NEO4J(request):
     global main_folder, project_folder
-    print "Creazione schema Neo4J"
+    print("Creazione schema Neo4J")
     data = MyUtils.json_loads_byteified(request.body)
     nome = data['nomeProgetto']
     nodi = data['nodes']
@@ -810,8 +810,6 @@ def crea_proprieta(proprieta, domini, list_unique, pk=None):
 
 
 def crea_vincoli(vincoli, nome):
-    print nome
-    print vincoli
     res = '\n' + ' ' * 4 + 'def clean(self):\n'
     for prop in vincoli.keys():
         for int in vincoli[prop]:
