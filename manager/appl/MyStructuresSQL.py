@@ -4,7 +4,6 @@ incapsulate le chiamate alle funzioni di __init__ delle super classi.
 """
 
 from __future__ import unicode_literals
-from abc import ABCMeta, abstractmethod
 
 from django.db import models
 
@@ -45,41 +44,41 @@ def FromGenToDjangoRel(attr):
 
 
 # Classi per i Field types
-class MyIDField(object):
-    def __new__(cls, *args, **kwargs):
+class MyIDField(models.AutoField):
+    def __init__(self, *args, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
-        return models.AutoField(*args, **kwargs)
+        super(MyIDField, self).__init__(*args, **kwargs)
 
 
-class MyBooleanField(object):
-    def __new__(cls, *args, **kwargs):
+class MyBooleanField(models.BooleanField):
+    def __init__(self, *args, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
-        return models.BooleanField(*args, **kwargs)
+        super(MyBooleanField, self).__init__(*args, **kwargs)
 
 
-class MyStringField(object):
-    def __new__(cls, *args, **kwargs):
+class MyStringField(models.CharField):
+    def __init__(self, *args, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
         kwargs['max_length'] = 255
-        return models.CharField(*args, **kwargs)
+        super(MyStringField, self).__init__(*args, **kwargs)
 
 
-class MyDateField(object):
-    def __new__(cls, *args, **kwargs):
+class MyDateField(models.DateField):
+    def __init__(self, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
-        return models.DateField(*args, **kwargs)
+        super(MyDateField, self).__init__(**kwargs)
 
 
-class MyFloatField(object):
-    def __new__(cls, *args, **kwargs):
+class MyFloatField(models.FloatField):
+    def __init__(self, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
-        return models.FloatField(*args, **kwargs)
+        super(MyFloatField, self).__init__(**kwargs)
 
 
-class MyIntegerField(object):
-    def __new__(cls, *args, **kwargs):
+class MyIntegerField(models.IntegerField):
+    def __init__(self, **kwargs):
         kwargs = FromGenToDjangoType(kwargs)
-        return models.IntegerField(*args, **kwargs)
+        super(MyIntegerField, self).__init__(**kwargs)
 
 
 # classe per le relationship
@@ -91,7 +90,7 @@ class MyRelationship(object):
             kwargs = FromGenToDjangoRel(kwargs)
             if 'model' in kwargs:
                 kwargs['through'] = kwargs.pop('model')
-            return models.ManyToManyField(to, *args, **kwargs)
+            return MyManyToManyField(to, **kwargs)
         # relationship uno a molti
         if ((kwargs['cardinalitySource'] == '1 - N' or kwargs['cardinalitySource'] == '0 - N') and
                 (kwargs['cardinalityTarget'] == '1 - 1' or kwargs['cardinalityTarget'] == '0 - 1')) or\
@@ -100,14 +99,29 @@ class MyRelationship(object):
             kwargs = FromGenToDjangoRel(kwargs)
             if 'model' in kwargs:  # viene tolto il model perche' non serve nel campo foreign key
                 kwargs.pop('model')
-            return models.ForeignKey(to, on_delete=models.CASCADE, *args, **kwargs)
+            return MyOneToManyField(to, on_delete=models.CASCADE, **kwargs)
         # relationship uno a uno
         if ((kwargs['cardinalitySource'] == '1 - 1' or kwargs['cardinalitySource'] == '0 - 1') and
                 (kwargs['cardinalityTarget'] == '1 - 1' or kwargs['cardinalityTarget'] == '0 - 1')):
             kwargs = FromGenToDjangoRel(kwargs)
             if 'model' in kwargs:  # viene tolto il model perche' non serve nel campo foreign key
                 kwargs.pop('model')
-            return models.ForeignKey(to, on_delete=models.CASCADE, *args, **kwargs)
+            return MyOneToOneField(to, on_delete=models.CASCADE, **kwargs)
+
+
+class MyManyToManyField(models.ManyToManyField):
+    def __init__(self, to, **kwargs):
+        super(MyManyToManyField, self).__init__(to, **kwargs)
+
+
+class MyOneToManyField(models.OneToOneField):
+    def __init__(self, to, **kwargs):
+        super(MyOneToManyField, self).__init__(to, **kwargs)
+
+
+class MyOneToOneField(models.OneToOneField):
+    def __init__(self, to, **kwargs):
+        super(MyOneToOneField, self).__init__(to, **kwargs)
 
 
 # Classe per i nodi
@@ -135,7 +149,7 @@ class MyNode(models.Model):
     def orderByParam(cls, param):
         """
         Metodo per ordinare i nodi della classe cls
-        :param parametro: criterio di ordinamento
+        :param param: criterio di ordinamento
         :return: QuerySet
         """
         return cls.objects.order_by(param)
@@ -185,7 +199,7 @@ class MyEdge(models.Model):
     def orderByParam(cls, param):
         """
         Metodo per ordinare gli archi della classe cls
-        :param parametro: criterio di ordinamento
+        :param param: criterio di ordinamento
         :return: QuerySet
         """
         return cls.objects.order_by(param)

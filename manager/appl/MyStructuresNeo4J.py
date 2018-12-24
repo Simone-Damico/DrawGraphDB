@@ -59,41 +59,39 @@ def FromGenToNeomodelRel(attr):
 
 
 # Classi per i Property types
-class MyIDField(object):
-    def __new__(cls, *args, **kwargs):
+class MyIDField(UniqueIdProperty):
+    def __init__(self):
+        super(MyIDField, self).__init__()
+
+
+class MyBooleanField(BooleanProperty):
+    def __init__(self, **kwargs):
         kwargs = FromGenToNeomodelType(kwargs)
-        return UniqueIdProperty(**kwargs)
+        super(MyBooleanField, self).__init__(**kwargs)
 
 
-class MyBooleanField(object):
-    def __new__(cls, *args, **kwargs):
+class MyStringField(StringProperty):
+    def __init__(self, *args, **kwargs):
         kwargs = FromGenToNeomodelType(kwargs)
-        return BooleanProperty(**kwargs)
+        super(MyStringField, self).__init__(*args, **kwargs)
 
 
-class MyStringField(object):
-    def __new__(cls, *args, **kwargs):
+class MyDateField(DateProperty):
+    def __init__(self, **kwargs):
         kwargs = FromGenToNeomodelType(kwargs)
-        return StringProperty(**kwargs)
+        super(MyDateField, self).__init__(**kwargs)
 
 
-class MyDateField(object):
-    def __new__(cls, *args, **kwargs):
+class MyFloatField(FloatProperty):
+    def __init__(self, **kwargs):
         kwargs = FromGenToNeomodelType(kwargs)
-        return DateProperty(**kwargs)
+        super(MyFloatField, self).__init__(**kwargs)
 
 
-class MyFloatField(object):
-    def __new__(cls, *args, **kwargs):
+class MyIntegerField(IntegerProperty):
+    def __init__(self, **kwargs):
         kwargs = FromGenToNeomodelType(kwargs)
-        return FloatProperty(**kwargs)
-
-
-class MyIntegerField(object):
-    def __new__(cls, *args, **kwargs):
-        kwargs = FromGenToNeomodelType(kwargs)
-        return IntegerProperty(**kwargs)
-
+        super(MyIntegerField, self).__init__(**kwargs)
 
 # Classi per le Relationship type
 class MyEdge(StructuredRel):
@@ -116,7 +114,7 @@ class MyRelationship(object):
         if kwargs['direction'] == 'OUTGOING':
             RelationshipTo(kwargs['cls_name'], kwargs['relation_type'], kwargs['cardinality'], kwargs['model'])
         elif kwargs['direction'] == 'INCOMING':
-            RelationshipTo(kwargs['cls_name'], kwargs['relation_type'], kwargs['cardinality'], kwargs['model'])
+            RelationshipFrom(kwargs['cls_name'], kwargs['relation_type'], kwargs['cardinality'], kwargs['model'])
         return RelationshipDefinition(kwargs['relation_type'], kwargs['cls_name'], kwargs['direction'], kwargs['model'])
 
 
