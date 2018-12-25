@@ -4,8 +4,6 @@ import json
 
 
 # Copia la gerarchia di cartelle e file da src a dest
-
-
 def copy(src, dest):
     try:
         shutil.copy(src, dest)

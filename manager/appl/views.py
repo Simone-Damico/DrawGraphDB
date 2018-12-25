@@ -810,12 +810,24 @@ def crea_proprieta(proprieta, domini, list_unique, pk=None):
 
 
 def crea_vincoli(vincoli, nome):
-    res = '\n' + ' ' * 4 + 'def clean(self):\n'
+    res = '\n' + indent(1) + 'def clean(self):\n'
     for prop in vincoli.keys():
         for int in vincoli[prop]:
-            res = res + ' ' * 8 + "if not(" + int.replace("value", "self." + prop) + "):\n"
-            res = res + " " * 12 + "raise ValidationError('Violazione vincolo: " + int.replace("value", prop) + "')\n"
-    res = res + "\n" + ' ' * 4 + "def save(self, *args, **kwargs):\n"
-    res = res + ' ' * 8 + "self.clean()\n"
-    res = res + ' ' * 8 + "return super(" + nome.capitalize() + ", self).save(**kwargs)\n"
+            res = res + indent(2) + "if not(" + int.replace("value", "self." + prop) + "):\n"
+            res = res + indent(3) + "raise ValidationError('Violazione vincolo: " + int.replace("value", prop) + "')\n"
+    res = res + "\n" + indent(1) + "def save(self, *args, **kwargs):\n"
+    res = res + indent(2) + "self.clean()\n"
+    res = res + indent(2) + "return super(" + nome.capitalize() + ", self).save(**kwargs)\n"
     return res
+
+def indent(level):
+    """ 
+    Function used for the indentation of python code. It returns multiple of 4 spaces.
+    
+    Parameters:
+    level (int): The level indicates the level of indentation, the spaces returned are 4 multiplied by level.
+
+    Returns: 
+    string: spaces for the indentation of python code.
+    """
+    return ' ' * ( 4 * level )
