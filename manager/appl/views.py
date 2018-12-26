@@ -5,7 +5,6 @@ import subprocess
 from . import MyUtils
 
 import time
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core.management import call_command
@@ -299,7 +298,7 @@ def create_schema_SQL(request):
             vincoli = {}
 
             if not nodo['primaryKey']:
-                new.write(' ' * 4 + "id_" + nome.replace(" ", "_") + " = MyIDField(auto_created=True, primary_key=True, serialize=False, "
+                new.write(indent(1) + "id_" + nome.replace(" ", "_") + " = MyIDField(auto_created=True, primary_key=True, serialize=False, "
                                                    "verbose_name='ID')\n")
 
             # new.write(' ' * 4 + "mynode_ptr = MyOneToOneField(auto_created=True, "
@@ -327,7 +326,7 @@ def create_schema_SQL(request):
                             (arco['molteplicita']['target'] == "0 - 1" or arco['molteplicita']['target'] == "1 - 1"):
 
                         if arco['source']['nome'] == nome:
-                            new.write(' ' * 4 + "edge_" + arco['target']['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['target']['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['target']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -335,7 +334,7 @@ def create_schema_SQL(request):
                                       "', cardinalityTarget='" + arco['molteplicita']['target'] +
                                       "', direction='OUTGOING')\n")
                         elif arco['target']['nome'] == nome:
-                            new.write(' ' * 4 + "edge_" + arco['source']['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['source']['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['source']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -377,7 +376,7 @@ def create_schema_SQL(request):
                         if arco['source']['nome'] == nome and (arco['molteplicita']['source'] == "0 - 1" or
                                                                arco['molteplicita']['source'] == "1 - 1"):
 
-                            new.write(' ' * 4 + "edge_" + arco['target']['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['target']['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['target']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -388,7 +387,7 @@ def create_schema_SQL(request):
                         elif arco['target']['nome'] == nome and (arco['molteplicita']['target'] == "0 - 1" or
                                                                  arco['molteplicita']['target'] == "1 - 1"):
 
-                            new.write(' ' * 4 + "edge_" + arco['source']['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['source']['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['source']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -425,7 +424,7 @@ def create_schema_SQL(request):
                           (arco['molteplicita']['target'] == "0 - N" or arco['molteplicita']['target'] == "1 - N")):
 
                         if arco['source']['nome'] == nome:
-                            new.write(' ' * 4 + "edge_" + arco['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['target']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_").capitalize() + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -434,7 +433,7 @@ def create_schema_SQL(request):
                                       "', direction='OUTGOING')\n")
 
                         elif arco['target']['nome'] == nome:
-                            new.write(' ' * 4 + "edge_" + arco['nome'].replace(" ", "_") + ' = ' +
+                            new.write(indent(1) + "edge_" + arco['nome'].replace(" ", "_") + ' = ' +
                                       "MyRelationship('" + arco['source']['nome'].replace(" ", "_").capitalize() +
                                       "', model='" + arco['nome'].replace(" ", "_").capitalize() + "', label='" + arco[
                                           'nome'].replace(" ", "_").upper() +
@@ -457,8 +456,8 @@ def create_schema_SQL(request):
             # Definisco la lista di tutte le chiavi secondarie composte che passerò a unique_together
             list_composite_unique = list_composite_unique_node + list_composite_unique_edge
 
-            new.write("\n" + ' ' * 4 + "class Meta:\n")
-            new.write(' ' * 8 + "unique_together" + ' = ' +
+            new.write("\n" + indent(1) + "class Meta:\n")
+            new.write(indent(2) + "unique_together" + ' = ' +
                       str(tuple(MyUtils.unique_to_tuple(list_composite_unique))) + "\n\n\n")
 
         for arco in archi:
@@ -487,19 +486,19 @@ def create_schema_SQL(request):
                 nome = arco['nome'].replace(" ", "_")
                 new.write('class ' + nome.capitalize() + '(MyEdge):\n')
 
-                new.write(' ' * 4 + "id_" + nome.replace(" ", "_") + " = MyIDField(auto_created=True, "
+                new.write(indent(1) + "id_" + nome.replace(" ", "_") + " = MyIDField(auto_created=True, "
                                                    "primary_key=True, serialize=False, verbose_name='ID')\n")
                 # new.write(' ' * 4 + "myedge_ptr = MyOneToOneField(auto_created=True, null=True, "
                 # "on_delete=models.CASCADE, parent_link=True, serialize=False, to='app.MyEdge')\n")
 
-                new.write(' ' * 4 + arco['source']['nome'].replace(" ", "_") + ' = ' +
+                new.write(indent(1)+ arco['source']['nome'].replace(" ", "_") + ' = ' +
                           "MyRelationship('" + arco['source']['nome'].replace(" ", "_").capitalize() +
                           "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco['nome'].replace(" ",
                                                                                                               "_").upper() +
                           "', cardinalitySource='" + arco['molteplicita']['source'] +
                           "', cardinalityTarget='0 - 1', direction='OUTGOING')\n")
 
-                new.write(' ' * 4 + arco['target']['nome'].replace(" ", "_") + ' = ' +
+                new.write(indent(1) + arco['target']['nome'].replace(" ", "_") + ' = ' +
                           "MyRelationship('" + arco['target']['nome'].replace(" ", "_").capitalize() +
                           "', model='" + arco['nome'].replace(" ", "_") + "', label='" + arco['nome'].replace(" ",
                                                                                                               "_").upper() +
@@ -517,8 +516,8 @@ def create_schema_SQL(request):
                     if len(sk) > 1:
                         list_composite_unique_edge.append(sk)
 
-                new.write("\n" + ' ' * 4 + "class Meta:\n")
-                new.write(' ' * 8 + "unique_together" + ' = ' +
+                new.write("\n" + indent(1) + "class Meta:\n")
+                new.write(indent(2) + "unique_together" + ' = ' +
                           str(tuple(MyUtils.unique_to_tuple(list_composite_unique_edge))) + "\n\n\n")
 
                 new.write('\n')
@@ -561,7 +560,7 @@ def create_schema_NEO4J(request):
             if len(arco['proprieta']) != 0:
                 new.write(crea_proprieta(arco['proprieta'], domini, []))
             else:
-                new.write(' ' * 4 + "pass\n")
+                new.write(indent(1) + "pass\n")
 
             new.write("\n\n")
 
@@ -570,7 +569,7 @@ def create_schema_NEO4J(request):
             new.write('class ' + nome.capitalize() + '(MyNode):\n')
 
             if nodo['primaryKey'] == []:
-                new.write(' ' * 4 + "id_" + nome + " = MyIDField()\n")
+                new.write(indent(1) + "id_" + nome + " = MyIDField()\n")
 
             # Defisisco una lista che conterrà la chiavi secondarie composte da più proprietà degli archi esaminati
             list_composite_unique_edge = []
@@ -582,7 +581,7 @@ def create_schema_NEO4J(request):
             for arco in archi:
 
                 if arco['source']['nome'] == nome:
-                    new.write(' ' * 4 + arco['nome'] + ' = ' +
+                    new.write(indent(1) + arco['nome'] + ' = ' +
                               "MyRelationship('" + arco['target']['nome'].capitalize() + "', " +
                               "model=" + arco['nome'].capitalize() + ", label='" + arco['nome'].upper() +
                               "', cardinalitySource='" + arco['molteplicita']['source'] +
@@ -590,7 +589,7 @@ def create_schema_NEO4J(request):
                               "', direction='OUTGOING')\n")
 
                 elif arco['target']['nome'] == nome:
-                    new.write(' ' * 4 + arco['nome'] + ' = ' +
+                    new.write(indent(1) + arco['nome'] + ' = ' +
                               "MyRelationship('" + arco['target']['nome'].capitalize() + "', "
                                                                                          "model=" + arco[
                                   'nome'].capitalize() + ", label='" + arco['nome'].upper() +
@@ -617,193 +616,193 @@ def crea_proprieta(proprieta, domini, list_unique, pk=None):
                 if dom['generico'] == 'int':
                     if prop['default'] is None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyIntegerField(primary_key=True, default=" + \
                                   dom['default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyIntegerField(unique=True, default=" + \
                                   dom[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyIntegerField(default=" + str(
                                 dom['default']) + ", notNull=" + str(prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyIntegerField(primary_key=True, default=" + \
                                   prop['default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyIntegerField(unique=True, default=" + \
                                   prop[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyIntegerField(default=" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyIntegerField(default=" + \
                                   prop[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
 
                 elif dom['generico'] == 'float':
                     if prop['default'] is None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyFloatField(primary_key=True, default=" + \
                                   dom[
                                       'default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyFloatField(unique=True, default=" + \
                                   dom[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyFloatField(default=" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyFloatField(default=" + dom[
                                 'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1)+ prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyFloatField(primary_key=True, default=" + \
                                   prop['default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyFloatField(unique=True, default=" + \
                                   prop[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyFloatField(default=" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyFloatField(default=" + \
                                   prop[
                                       'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
 
                 elif dom['generico'] == 'string':
                     if prop['default'] != None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyStringField(primary_key=True, default='" + \
                                   prop['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ",
+                            res = res + indent(1) + prop['nomeProp'].replace(" ",
                                                                            "_") + " = MyStringField(unique=True, default='" + \
                                   prop[
                                       'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(default='" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(default='" + \
                                   prop[
                                       'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                     elif prop['default'] is None and dom['default'] is not None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, default='" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, default='" + \
                                   dom['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, default='" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, default='" + dom[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(default='" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(default='" + dom[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True')\n"
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, notNull=" + str(
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyStringField(notNull=" + str(
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyStringField(notNull=" + str(
                                 prop['notNull']) + ")\n"
 
                 elif dom['generico'] == 'bool':
                     if prop['default'] is None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(primary_key=True, default=" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(primary_key=True, default=" + \
                                   dom['default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(unique=True, default=" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(unique=True, default=" + dom[
                                 'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(default=" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(default=" + dom[
                                 'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(primary_key=True, default=" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(primary_key=True, default=" + \
                                   prop['default'] + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(unique=True, default=" + prop[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(unique=True, default=" + prop[
                                 'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(default=" + prop[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyBooleanField(default=" + prop[
                                 'default'] + ", notNull=" + str(prop['notNull']) + ")\n"
 
                 elif dom['generico'] == 'date':
                     if prop['default'] is not None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True, default='" + \
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True, default='" + \
                                   prop['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, default='" + prop[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, default='" + prop[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(default='" + prop[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(default='" + prop[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                     elif prop['default'] is None and dom['default'] is not None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True, default='" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True, default='" + dom[
                                 'default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, default='" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, default='" + dom[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(default='" + dom[
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(default='" + dom[
                                 'default'] + "', notNull=" + str(prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True)\n"
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(primary_key=True)\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, notNull=" + str(
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(unique=True, notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop['nomeProp'].replace(" ", "_") + " = MyDateField(notNull=" + str(
+                            res = res + indent(1) + prop['nomeProp'].replace(" ", "_") + " = MyDateField(notNull=" + str(
                                 prop['notNull']) + ")\n"
 
                 elif dom['generico'] == 'enum':
                     if prop['default'] is not None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                     elif prop['default'] is None and dom['default'] is not None:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ")\n"
                         elif prop['nomeProp'] in list_unique:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
-                            res = res + ' ' * 4 + prop[
+                            res = res + indent(1) + prop[
                                 'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
                                 dom['valori']) + ", notNull=" + str(prop['notNull']) + ")\n"
     return res
