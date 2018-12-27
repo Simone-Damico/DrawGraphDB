@@ -2,110 +2,103 @@
 <html>
 <head>
 	<meta charset="utf-8">
-
+	
 	<!-- importo le librerie -->
 	<script src="{% static 'source/lib/http_d3js.org_d3.v3.js' %}"></script>
 	<script src="{% static 'source/lib/angular-1.6.4/angular.js' %}"></script>
 	<script src="{% static 'source/lib/angular-1.6.4/angular-aria.js' %}"></script>
 	<script src="{% static 'source/lib/angular-1.6.4/angular-sanitize.js' %}"></script>
-    <script src="{% static 'source/lib/angular-1.6.4/angular-animate.js' %}"></script>
-
-    <script src="{% static 'source/lib/http_cdn.jsdelivr.net_hammerjs_2.0.4_hammer.js' %}"></script>
+	<script src="{% static 'source/lib/angular-1.6.4/angular-animate.js' %}"></script>
+	
+	<script src="{% static 'source/lib/http_cdn.jsdelivr.net_hammerjs_2.0.4_hammer.js' %}"></script>
 	<script src="{% static 'source/lib/http_ajax.googleapis.com_ajax_libs_angular_material_1.1.4_angular-material.js' %}"></script>
-    <script src="{% static 'source/lib/__code.angularjs.org_snapshot_angular-messages.js' %}"></script>
-
-    <link rel="stylesheet" href="{% static '/source/lib/angular-material.min.css' %}">
-
+	<script src="{% static 'source/lib/__code.angularjs.org_snapshot_angular-messages.js' %}"></script>
+	
+	<link rel="stylesheet" href="{% static '/source/lib/angular-material.min.css' %}">
+	
 	<!-- importo controller -->
 	<script type="text/javascript" src="{% static 'source/controllers/myApp.js' %}"></script>
 	<script type="text/javascript" src="{% static 'source/controllers/graphService.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/infoProjectController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/newProjectController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/saveProjectController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/openProjectController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/deleteProjectController.js' %}"></script>
-    <script type="text/javascript" src="{% static 'source/controllers/populationProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/infoProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/newProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/saveProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/openProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/deleteProjectController.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/controllers/populationProjectController.js' %}"></script>
 	<script type="text/javascript" src="{% static 'source/controllers/nodeController.js' %}"></script>
 	<script type="text/javascript" src="{% static 'source/controllers/linkController.js' %}"></script>
 	<script type="text/javascript" src="{% static 'source/controllers/typeController.js' %}"></script>
 	<script type="text/javascript" src="{% static 'source/controllers/graphController.js' %}"></script>
-
+	
 	<!-- importo css per l'editor del grafo -->
 	<link href="{% static 'source/css/GraphEditor.css' %}" rel="stylesheet">
-    <link href="{% static 'source/css/menuBar.css' %}" rel="stylesheet">
-
-    <title>Editor di grafi</title>
-
+	<link href="{% static 'source/css/menuBar.css' %}" rel="stylesheet">
+	
+	<title>Editor di grafi</title>
+	
 </head>
 {% verbatim %}
 <body ng-app="MyApp" style="background-color: #DCDCDC">
-
+	
 	<!-- barra dei bottoni e nome del progetto, i nomi e le operazioni dei bottoni vengono dal controller-->
-
-	<md-toolbar class="md-hue-2">
-		<div class="md-toolbar-tools">
-			<md-menu>
-				<md-button class="md-icon-button" aria-label="Settings">
-					<img class="png-icon" src="static/source/icons/menu_icon.png" ng-click="$mdMenu.open($event)" aria-label="x" style="width: 24px; height: 24px;">
-				</md-button>
-				<md-menu-content>
-					<md-menu-item ng-controller="infoProject">
-						<md-button ng-click="showInfoProject($event)">
-                            <img class="png-icon" src="static/source/icons/settings-gears.png" aria-label="x" style="width: 20px; height: 20px;"/>
-                            Progetto</md-button>
-					</md-menu-item>
-                    <md-menu-item ng-controller="newProject">
-                        <md-button ng-click="showNewProject($event)">
-                            <img class="png-icon" src="static/source/icons/add-documents.png" aria-label="x" style="width: 20px; height: 20px;"/>
-                            Nuovo</md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-controller="saveProject">
-                        <md-button ng-click="saveGraph()">
-                            <img class="png-icon" src="static/source/icons/ic_file_upload_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
-                            Salva
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-controller="openProject">
-                        <md-button ng-click="showOpenProject($event)">
-                            <img class="png-icon" src="static/source/icons/ic_file_download_black_24dp_2x.png" aria-label="carica" style="width: 20px; height: 20px;"/>
-                            Apri
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-controller="saveProject">
-                        <md-button ng-click="generateSchemaDB($event)">
-                            <img class="png-icon" src="static/source/icons/ic_file_upload_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
-                            Genera schema
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-controller="deleteProject">
-                        <md-button ng-click="eliminazione()">
-                            <img class="png-icon" src="static/source/icons/ic_delete_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
-                            Elimina
-                        </md-button>
-                    </md-menu-item>
-				</md-menu-content>
-			</md-menu>
-
-			<h2 flex="" md-truncate="" ng-controller="infoProject">{{ nomeProgetto }}</h2>
-
+	
+	<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+		
+		<div ng-controller="infoProject">
+			<md-nav-item md-nav-click="showInfoProject($event)">
+				<img class="png-icon" src="static/source/icons/settings-gears.png" aria-label="x" style="width: 20px; height: 20px;"/> 
+				Progetto
+			</md-nav-item>
 		</div>
-	</md-toolbar>
-
-    <div>
+		<div ng-controller="newProject">
+			<md-nav-item md-nav-click="showNewProject($event)">
+				<img class="png-icon" src="static/source/icons/add-documents.png" aria-label="x" style="width: 20px; height: 20px;"/>
+				Nuovo
+			</md-nav-item>
+		</div>
+		<div ng-controller="saveProject">
+			<md-nav-item md-nav-click="saveGraph()">
+				<img class="png-icon" src="static/source/icons/ic_file_upload_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
+				Salva
+			</md-nav-item>
+		</div>
+		<div ng-controller="openProject">
+			<md-nav-item md-nav-click="showOpenProject($event)">
+				<img class="png-icon" src="static/source/icons/ic_file_download_black_24dp_2x.png" aria-label="carica" style="width: 20px; height: 20px;"/>
+				Apri
+			</md-nav-item>
+		</div>
+		<div ng-controller="saveProject">
+			<md-nav-item md-nav-click="generateSchemaDB($event)">
+				<img class="png-icon" src="static/source/icons/ic_file_upload_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
+				Genera schema
+			</md-nav-item>
+		</div>
+		<div ng-controller="deleteProject">
+			<md-nav-item md-nav-click="eliminazione()">
+				<img class="png-icon" src="static/source/icons/ic_delete_black_24dp_2x.png" aria-label="x" style="width: 20px; height: 20px;"/>
+				Elimina
+			</md-nav-item>
+		</div>
+	</md-nav-bar>
+	<!-- <h2 flex="" md-truncate="" ng-controller="infoProject">{{ nomeProgetto }}</h2>  -->
+	
+	
+	<div>
 		<md-button ng-controller= "nodeController" ng-click="showNodes($event)">Nodi</md-button>
-
+		
 		<md-button ng-controller= "linkController" ng-click="showLinks($event)">Archi</md-button>
-
+		
 		<md-button ng-controller="typeController" ng-click="openLeftMenu()">Domini</md-button>
-
-        <div id = "sideNavContainer" ng-controller="typeController" layout = "row" ng-cloak>
+		
+		<div id = "sideNavContainer" ng-controller="typeController" layout = "row" ng-cloak>
 			<md-sidenav md-component-id = "left" class = "md-sidenav-left" >
 				<md-toolbar layout="row">
 					<div class="md-toolbar-tools">
 						<h1>DOMINI</h1>
 					</div>
 				</md-toolbar>
-
+				
 				<md-content>
 					<md-list flex="">
 						<md-subheader class="md-no-sticky"><h2>Lista dei domini utente</h2></md-subheader>
@@ -119,23 +112,23 @@
 							<div class="md-list-item-text" layout="column">
 								<h4>{{ dom.nome }}</h4>
 								<md-button class="md-secondary" ng-click="removeDom($index)" style="color : black;
-                                background-color: red;
-                                min-width: 5%;
-                                font-size: 16px;">X</md-button>
+								background-color: red;
+								min-width: 5%;
+								font-size: 16px;">X</md-button>
 							</div>
 						</md-list-item>
-				</md-content>
-				<hr/>
-                <div>
-                    <md-button ng-click="addNewType($event)" class="md-raised"> nuovo tipo </md-button>
-                </div>
-            </md-sidenav>
-
+					</md-content>
+					<hr/>
+					<div>
+						<md-button ng-click="addNewType($event)" class="md-raised"> nuovo tipo </md-button>
+					</div>
+				</md-sidenav>
+				
+			</div>
 		</div>
-	</div>
-    <div style="float:left; display:block; width:50px; height:150px"></div>
-    <div style="float:left; display:block; width:150px; height:150px" id ="grafo" graph-Direct apri="show"></div>
-
-</body>
-{% endverbatim %}
-</html>
+		<div style="float:left; display:block; width:50px; height:150px"></div>
+		<div style="float:left; display:block; width:150px; height:150px" id ="grafo" graph-Direct apri="show"></div>
+		
+	</body>
+	{% endverbatim %}
+	</html>

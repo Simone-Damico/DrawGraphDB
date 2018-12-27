@@ -1,3 +1,5 @@
 venv
 .vscode
 .idea
+manager/appl/*.pyc
+manager/manager/*.pyc

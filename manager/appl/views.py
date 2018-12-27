@@ -2,7 +2,7 @@
 import os
 import json
 import subprocess
-from . import MyUtils
+from . import utils
 
 import time
 from django.http import HttpResponse
@@ -68,16 +68,16 @@ def new_project(request):
             if "from django.conf.urls import url" in line:
                 line = line.replace("from django.conf.urls import url", "from django.conf.urls import include, url")
             new.write(line)
-            if "url(r'^admin/', admin.site.urls)," in line:
+            if "url(r'^admin/', admin.site.urls)," in line: # TODO: change to django 2.0 
                 new.write("    url(r'^', include('app.urls')),\n")
     os.remove(os.path.join(project_folder, project_name, "urls.py"))
     os.rename(os.path.join(project_folder, project_name, "new.py"),
               os.path.join(project_folder, project_name, "urls.py"))
 
     # Creo il file app.url di app
-    MyUtils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'urlsTemplate.py'),
+    utils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'urlsTemplate.py'),
                  os.path.join(project_folder, 'app', 'urls.py'))
-    MyUtils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'viewsTemplates.py'),
+    utils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'viewsTemplates.py'),
                  os.path.join(project_folder, 'app', 'views.py'))
 
     # Aggiungo il progetto al database del manager
@@ -229,7 +229,7 @@ def save_graph(request):
 
 def create_schema_SQL(request):
     global main_folder, current_project
-    data = MyUtils.json_loads_byteified(request.body)
+    data = utils.json_loads_byteified(request.body)
     name_db = data['nomeDB']
     dbms = data['dbms']
     graph = data['graph']

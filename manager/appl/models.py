@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.db import models
 from django.utils import timezone
 from jsonfield import JSONField
@@ -10,9 +8,9 @@ from jsonfield import JSONField
 
 class Project(models.Model):
 
-    DBMS = (('MySQL', 'MySQL'), ('SQLite', 'SQLite'), ('Neo4j', 'Neo4j'))
+    DBMS = (('MySQL', 'MySQL'), ('SQLite', 'SQLite'), ('Neo4j', 'Neo4j')) # TODO: refactor this 
 
-    id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID') # TODO: remove this
     name_project = models.CharField(unique=True, max_length=200)
     name_db = models.CharField(max_length=200, null=True)
     dbms = models.CharField(max_length=6, choices=DBMS, null=True)
