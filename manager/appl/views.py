@@ -45,17 +45,13 @@ def new_project(request):
     # Creo la struttura delle cartelle e dei file per il nuovo progetto
     project_folder = os.path.join(main_folder, project_name)
     app_folder = os.path.join(project_folder, 'app')
-    os.mkdir(project_folder)
-    #os.mkdir(app_folder)
+    #os.mkdir(project_folder)
     project_port = project_port + 1
     print(os.getcwd())
 
     call_command('startproject', project_name) #TODO errore nel creare il progetto.
-    #call_command('startapp', 'app', app_folder)
-
-    subprocess.Popen(
-        ['python', 'manage.py', 'makemigrations', '--settings=' + current_project.name_project + '.settings'],
-        cwd=current_project.folder)
+    os.mkdir(app_folder)
+    call_command('startapp', 'app', app_folder)
 
     # Modifico il file setting del progetto appena creato a seconda del dbms scelto dall'utente
     with open(os.path.join(project_folder, project_name, "settings.py")) as old, \
@@ -84,9 +80,9 @@ def new_project(request):
 
     # Creo il file app.url di app
     utils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'urlsTemplate.py'),
-                 os.path.join(project_folder, 'app', 'urls.py'))
+               os.path.join(project_folder, 'app', 'urls.py'))
     utils.copy(os.path.join(main_folder, 'manager', 'appl', 'projectTemplates', 'viewsTemplates.py'),
-                 os.path.join(project_folder, 'app', 'views.py'))
+               os.path.join(project_folder, 'app', 'views.py'))
 
     # Aggiungo il progetto al database del manager
     current_project = Project(name_project=project_name,
