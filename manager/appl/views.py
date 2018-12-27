@@ -263,10 +263,10 @@ def create_schema_SQL(request):
 
     # Creo i file delle strutture dati giusto in base al tipo di database
     if dbms == 'Neo4j':
-        MyUtils.copy(os.path.join(main_folder, 'manager', 'appl', 'MyStructuresNeo4J.py'),
+        utils.copy(os.path.join(main_folder, 'manager', 'appl', 'MyStructuresNeo4J.py'),
                      os.path.join(project_folder, 'app', 'MyStructuresNeo4J.py'))
     else:
-        MyUtils.copy(os.path.join(main_folder, 'manager', 'appl', 'MyStructuresSQL.py'),
+        utils.copy(os.path.join(main_folder, 'manager', 'appl', 'MyStructuresSQL.py'),
                      os.path.join(project_folder, 'app', 'MyStructuresSQL.py'))
 
     nodi = graph['nodes']
@@ -458,7 +458,7 @@ def create_schema_SQL(request):
 
             new.write("\n" + indent(1) + "class Meta:\n")
             new.write(indent(2) + "unique_together" + ' = ' +
-                      str(tuple(MyUtils.unique_to_tuple(list_composite_unique))) + "\n\n\n")
+                      str(tuple(utils.unique_to_tuple(list_composite_unique))) + "\n\n\n")
 
         for arco in archi:
             # Esamino gli archi con molteplicità molti - molti e genero una nuova relazione
@@ -518,7 +518,7 @@ def create_schema_SQL(request):
 
                 new.write("\n" + indent(1) + "class Meta:\n")
                 new.write(indent(2) + "unique_together" + ' = ' +
-                          str(tuple(MyUtils.unique_to_tuple(list_composite_unique_edge))) + "\n\n\n")
+                          str(tuple(utils.unique_to_tuple(list_composite_unique_edge))) + "\n\n\n")
 
                 new.write('\n')
                 new.write('\n')
@@ -541,7 +541,7 @@ def create_schema_SQL(request):
 def create_schema_NEO4J(request):
     global main_folder, project_folder
     print("Creazione schema Neo4J")
-    data = MyUtils.json_loads_byteified(request.body)
+    data = utils.json_loads_byteified(request.body)
     nome = data['nomeProgetto']
     nodi = data['nodes']
     archi = data['links']
@@ -765,45 +765,45 @@ def crea_proprieta(proprieta, domini, list_unique, pk=None):
                     if prop['default'] is not None:
                         if pk == prop['nomeProp']:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + prop['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                     elif prop['default'] is None and dom['default'] is not None:
                         if pk == prop['nomeProp']:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "')\n"
                         elif prop['nomeProp'] in list_unique:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                         else:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + utils.choise_to_string(
                                 dom['valori']) + ", default='" + dom['default'] + "', notNull=" + str(
                                 prop['notNull']) + ")\n"
                     else:
                         if pk == prop['nomeProp']:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(primary_key=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ")\n"
                         elif prop['nomeProp'] in list_unique:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(unique=True, choices=" + utils.choise_to_string(
                                 dom['valori']) + ", notNull=" + str(prop['notNull']) + ")\n"
                         else:
                             res = res + indent(1) + prop[
-                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + MyUtils.choise_to_string(
+                                'nomeProp'].replace(" ", "_") + " = MyStringField(choices=" + utils.choise_to_string(
                                 dom['valori']) + ", notNull=" + str(prop['notNull']) + ")\n"
     return res
 
