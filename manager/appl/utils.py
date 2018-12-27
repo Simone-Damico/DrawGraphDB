@@ -1,12 +1,14 @@
 import shutil
 import errno
-import json
-
-
-# Copia la gerarchia di cartelle e file da src a dest
 
 
 def copy(src, dest):
+    """
+    Function used for copy a hierarchy of directory from src to dest
+    :param src: The directory to copy from
+    :param dest: The directory in which to copy
+    :except errno.ENOTDIR: if the source isn't a directory
+    """
     try:
         shutil.copy(src, dest)
     except OSError as e:
@@ -17,43 +19,16 @@ def copy(src, dest):
             print('Directory not copied. Error: %s' % e)
 
 
-# Funzioni per il coricamento del JSON che ritornano stringhe e non UNICODE
-def json_load_byteified(file_handle):
-    return _byteify(
-        json.load(file_handle, object_hook=_byteify),
-        ignore_dicts=True
-    )
+def choise_to_string(lis):
+    """
+    Function used for convert a list of element in a string that represent a list of tuple used for a choice field in
+    the models.
 
-
-def json_loads_byteified(json_text):
-    return _byteify(
-        json.loads(json_text, object_hook=_byteify),
-        ignore_dicts=True
-    )
-
-
-def _byteify(data, ignore_dicts=False):
-    # if this is a unicode string, return its string representation
-    if isinstance(data, unicode):
-        return data.encode('utf-8')
-    # if this is a list of values, return list of byteified values
-    if isinstance(data, list):
-        return [_byteify(item, ignore_dicts=True) for item in data]
-    # if this is a dictionary, return dictionary of byteified keys and values
-    # but only if we haven't already byteified it
-    if isinstance(data, dict) and not ignore_dicts:
-        return {
-            _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
-            for key, value in data.iteritems()
-        }
-    # if it's anything else, return it in its original form
-    return data
-
-
-# Funzione che presa una lista di elementi per un campo choice crea una tupla di tuple e la restituisce come stringa
-def choise_to_string(lista):
+    :param lis: A list of element to convert
+    :return res: A tuple of tuple like a string
+    """
     res = '('
-    for elem in lista:
+    for elem in lis:
         res = res + "('" + elem + "', '" + elem + "'), "
     res = res[:len(res)-2]
     res = res + ')'
@@ -61,8 +36,27 @@ def choise_to_string(lista):
 
 
 # Funzione che presa una lista di liste restituisce una lista di tuple
-def unique_to_tuple(lista):
+def unique_to_tuple(lis):
+    """
+    Function used for convert a list of list in a list of tuple.
+
+    :param lis: A list of list to convert
+    :return res: A list of tuple
+    """
     res = []
-    for l in lista:
-        res.append(tuple(l))
+    for elem in lis:
+        res.append(tuple(elem))
     return res
+
+
+def indent(level):
+    """
+    Function used for the indentation of python code. It returns multiple of 4 spaces.
+
+    Parameters:
+    level (int): The level indicates the level of indentation, the spaces returned are 4 multiplied by level.
+
+    Returns:
+    string: spaces for the indentation of python code.
+    """
+    return ' ' * (4 * level)
